@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCare - Mental Health Support for Students</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><circle cx="200" cy="200" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="800" cy="300" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="400" cy="600" r="4" fill="rgba(255,255,255,0.1)"/><circle cx="700" cy="800" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0px) rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Assessment Section */
+        .assessment {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .assessment-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .question:nth-child(2) { animation-delay: 0.1s; }
+        .question:nth-child(3) { animation-delay: 0.2s; }
+        .question:nth-child(4) { animation-delay: 0.3s; }
+        .question:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .option {
+            position: relative;
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option label {
+            display: block;
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .option input[type="radio"]:checked + label {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option label:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto 0;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Results */
+        .results {
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .severity-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .severity-level {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .low { background: #4caf50; }
+        .moderate { background: #ff9800; }
+        .high { background: #f44336; }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* Resources Section */
+        .resources {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .resource-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .resource-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .resource-item {
+            display: none;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .resource-item.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🧠 MindCare</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#assessment">Assessment</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Your Mental Health Matters</h1>
+                    <p>A comprehensive digital support system designed specifically for higher education students</p>
+                    <a href="#assessment" class="cta-button">Take Assessment</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="assessment" class="assessment">
+            <div class="container">
+                <h2 class="section-title">Mental Health Assessment</h2>
+                <div class="assessment-form">
+                    <form id="mentalHealthForm">
+                        <div class="question">
+                            <h3>1. How often do you feel sad or depressed?</h3>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="depression" value="1" id="dep1">
+                                    <label for="dep1">Never</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="depression" value="2" id="dep2">
+                                    <label for="dep2">Rarely</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="depression" value="3" id="dep3">
+                                    <label for="dep3">Sometimes</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="depression" value="4" id="dep4">
+                                    <label for="dep4">Often</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="depression" value="5" id="dep5">
+                                    <label for="dep5">Always</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <h3>2. How frequently do you experience anxiety or worry?</h3>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="anxiety" value="1" id="anx1">
+                                    <label for="anx1">Never</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="anxiety" value="2" id="anx2">
+                                    <label for="anx2">Rarely</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="anxiety" value="3" id="anx3">
+                                    <label for="anx3">Sometimes</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="anxiety" value="4" id="anx4">
+                                    <label for="anx4">Often</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="anxiety" value="5" id="anx5">
+                                    <label for="anx5">Always</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <h3>3. How is your sleep quality?</h3>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="sleep" value="1" id="sleep1">
+                                    <label for="sleep1">Excellent</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="sleep" value="2" id="sleep2">
+                                    <label for="sleep2">Good</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="sleep" value="3" id="sleep3">
+                                    <label for="sleep3">Average</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="sleep" value="4" id="sleep4">
+                                    <label for="sleep4">Poor</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="sleep" value="5" id="sleep5">
+                                    <label for="sleep5">Very Poor</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <h3>4. How well do you handle academic stress?</h3>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="stress" value="1" id="stress1">
+                                    <label for="stress1">Very Well</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="stress" value="2" id="stress2">
+                                    <label for="stress2">Well</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="stress" value="3" id="stress3">
+                                    <label for="stress3">Moderately</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="stress" value="4" id="stress4">
+                                    <label for="stress4">Poorly</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="stress" value="5" id="stress5">
+                                    <label for="stress5">Very Poorly</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <h3>5. How connected do you feel to others?</h3>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="social" value="1" id="social1">
+                                    <label for="social1">Very Connected</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="social" value="2" id="social2">
+                                    <label for="social2">Connected</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="social" value="3" id="social3">
+                                    <label for="social3">Neutral</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="social" value="4" id="social4">
+                                    <label for="social4">Disconnected</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="social" value="5" id="social5">
+                                    <label for="social5">Very Isolated</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Analyze My Mental Health</button>
+                    </form>
+
+                    <div id="results" class="results">
+                        <h3>Your Assessment Results</h3>
+                        <div id="resultContent"></div>
+                        <button onclick="connectToCounselor()" class="cta-button" style="margin-top: 20px;">Connect with Counselor</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Comprehensive Support Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Smart Assessment</h3>
+                        <p>AI-powered mental health screening that provides personalized insights based on validated psychological instruments.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Professional Connection</h3>
+                        <p>Direct bridge to qualified psychologists and counselors for professional support when needed.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎵</div>
+                        <h3>Therapeutic Resources</h3>
+                        <p>Curated collection of calming music, guided meditations, and wellness exercises for daily support.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💪</div>
+                        <h3>Wellness Exercises</h3>
+                        <p>Video-guided exercises including breathing techniques, mindfulness practices, and physical activities.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>24/7 Accessibility</h3>
+                        <p>Round-the-clock access to resources and emergency support through our mobile-optimized platform.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Privacy Protected</h3>
+                        <p>Complete confidentiality with secure data handling and anonymous support options.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resources" class="resources">
+            <div class="container">
+                <h2 class="section-title">Wellness Resources</h2>
+                <div class="resource-tabs">
+                    <button class="tab-btn active" onclick="showResource('exercises')">Exercises</button>
+                    <button class="tab-btn" onclick="showResource('music')">Calming Music</button>
+                    <button class="tab-btn" onclick="showResource('videos')">Wellness Videos</button>
+                    <button class="tab-btn" onclick="showResource('articles')">Articles</button>
+                </div>
+                <div class="resource-content">
+                    <div id="exercises" class="resource-item active">
+                        <h3>🧘‍♀️ Mindfulness & Breathing Exercises</h3>
+                        <p>Practice these simple yet effective exercises to reduce stress and anxiety:</p>
+                        <ul style="text-align: left; display: inline-block; margin-top: 20px;">
+                            <li><strong>4-7-8 Breathing:</strong> Inhale for 4, hold for 7, exhale for 8 seconds</li>
+                            <li><strong>Progressive Muscle Relaxation:</strong> Tense and release each muscle group</li>
+                            <li><strong>5-4-3-2-1 Grounding:</strong> Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste</li>
+                            <li><strong>Body Scan Meditation:</strong> Focus attention on different parts of your body</li>
+                        </ul>
+                    </div>
+                    <div id="music" class="resource-item">
+                        <h3>🎵 Therapeutic Music Collection</h3>
+                        <p>Specially curated playlists designed to promote relaxation and emotional well-being:</p>
+                        <div style="margin-top: 20px;">
+                            <button onclick="playMusic('calm')" style="margin: 10px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px;">🌊 Nature Sounds</button>
+                            <button onclick="playMusic('focus')" style="margin: 10px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px;">🎹 Focus Music</button>
+                            <button onclick="playMusic('sleep')" style="margin: 10px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px;">😴 Sleep Sounds</button>
+                        </div>
+                    </div>
+                    <div id="videos" class="resource-item">
+                        <h3>📹 Guided Wellness Videos</h3>
+                        <p>Professional-led sessions to support your mental health journey:</p>
+                        <ul style="text-align: left; display: inline-block; margin-top: 20px;">
+                            <li><strong>Yoga for Stress Relief</strong> - 15-minute gentle yoga flow</li>
+                            <li><strong>Meditation for Beginners</strong> - Learn basic mindfulness techniques</li>
+                            <li><strong>Sleep Hygiene Tips</strong> - Improve your sleep quality</li>
+                            <li><strong>Study Break Exercises</strong> - Quick energizing movements</li>
+                        </ul>
+                    </div>
+                    <div id="articles" class="resource-item">
+                        <h3>📚 Educational Articles</h3>
+                        <p>Evidence-based information to help you understand and manage mental health:</p>
+                        <ul style="text-align: left; display: inline-block; margin-top: 20px;">
+                            <li><strong>Understanding Academic Anxiety</strong> - Causes and coping strategies</li>
+                            <li><strong>Building Resilience in College</strong> - Developing mental toughness</li>
+                            <li><strong>Social Connection & Mental Health</strong> - The importance of relationships</li>
+                            <li><strong>When to Seek Professional Help</strong> - Recognizing warning signs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Emergency Resources</h3>
+                    <p>Crisis Helpline: 1-800-CRISIS</p>
+                    <p>Campus Counseling: Ext. 2435</p>
+                    <p>24/7 Text Support: Text HOME to 741741</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#assessment" style="color: #ccc; text-decoration: none;">Take Assessment</a></p>
+                    <p><a href="#resources" style="color: #ccc; text-decoration: none;">Wellness Resources</a></p>
+                    <p><a href="#" onclick="connectToCounselor()" style="color: #ccc; text-decoration: none;">Connect with Counselor</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>About MindCare</h3>
+                    <p>Developed for Smart India Hackathon</p>
+                    <p>Supporting student mental health through technology</p>
+                    <p>Confidential • Professional • Accessible</p>
+                </div>
+            </div>
+            <div style="text-align: center; padding-top: 20px; border-top: 1px solid #555;">
+                <p>&copy; 2024 MindCare. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Counselor Connection -->
+    <div id="counselorModal" class="modal">
+        <div class="modal-content" style="position: relative;">
+            <span class="close" onclick="closeCounselorModal()">&times;</span>
+            <h2>Connect with a Professional</h2>
+            <p>Based on your assessment, we recommend connecting with a qualified mental health professional.</p>
+            <div style="margin: 30px 0;">
+                <button onclick="bookAppointment()" style="margin: 10px; padding: 15px 30px; background: #4caf50; color: white; border: none; border-radius: 25px; cursor: pointer;">📅 Book Counseling Session</button>
+                <button onclick="joinSupport()" style="margin: 10px; padding: 15px 30px; background: #2196f3; color: white; border: none; border-radius: 25px; cursor: pointer;">👥 Join Support Group</button>
+                <button onclick="emergencyContact()" style="margin: 10px; padding: 15px 30px; background: #f44336; color: white; border: none; border-radius: 25px; cursor: pointer;">🚨 Emergency Support</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Assessment Form Handler
+        document.getElementById('mentalHealthForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            let totalScore = 0;
+            let responses = {};
+            
+            for (let [key, value] of formData.entries()) {
+                responses[key] = parseInt(value);
+                totalScore += parseInt(value);
+            }
+            
+            // Calculate individual category scores
+            const depressionScore = responses.depression || 0;
+            const anxietyScore = responses.anxiety || 0;
+            const sleepScore = responses.sleep || 0;
+            const stressScore = responses.stress || 0;
+            const socialScore = responses.social || 0;
+            
+            const averageScore = totalScore / 5;
+            
+            // Generate results
+            displayResults(depressionScore, anxietyScore, sleepScore, stressScore, socialScore, averageScore);
+        });
+        
+        function displayResults(depression, anxiety, sleep, stress, social, average) {
+            const
